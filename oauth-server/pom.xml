@@ -10,7 +10,19 @@
 	
     <artifactId>oauth-server</artifactId>
     <packaging>war</packaging>
-    <name>oauth-playground Server</name>
+    <name>oauth-playground REST Server</name>
+    
+    <dependencyManagement>
+	    <dependencies>
+	        <dependency>
+	            <groupId>org.jboss.arquillian</groupId>
+	            <artifactId>arquillian-bom</artifactId>
+	            <version>1.1.2.Final</version>
+	            <scope>import</scope>
+	            <type>pom</type>
+	        </dependency>
+	    </dependencies>
+    </dependencyManagement>
     
     <dependencies>
 		<dependency>
@@ -26,10 +38,64 @@
             <version>4.8.2</version>
             <scope>test</scope>
         </dependency>
+
+         <dependency>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-container</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxrs</artifactId>
+			<version>2.2.1.GA</version>
+			<scope>test</scope>
+		</dependency>
+
     </dependencies>
+    
     <properties>
-        <jersey-version>1.8</jersey-version>
+        <wildfly.version>8.0.0.CR1</wildfly.version>
+		<wildfly.home.dir>${project.build.directory}/server</wildfly.home.dir>
+       	<wildfly.home>${wildfly.home.dir}/wildfly-${wildfly.version}</wildfly.home>
+<!--        	<jboss.home>${wildfly.home}</jboss.home> -->
     </properties>
+
+	<profiles>
+		<profile>
+		    <id>arquillian-wildfly-managed</id>
+		    <activation>
+      			<activeByDefault>true</activeByDefault>
+    		</activation>
+		    <dependencies>
+		        <dependency>
+		            <groupId>org.jboss.spec</groupId>
+		            <artifactId>jboss-javaee-6.0</artifactId>
+		            <version>1.0.0.Final</version>
+		            <type>pom</type>
+		            <scope>provided</scope>
+		        </dependency>
+		        <dependency>
+					<groupId>org.wildfly</groupId>
+					<artifactId>wildfly-arquillian-container-managed</artifactId>
+					<version>${wildfly.version}</version>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.wildfly</groupId>
+					<artifactId>wildfly-arquillian-protocol-jmx</artifactId>
+					<version>${wildfly.version}</version>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.wildfly</groupId>
+					<artifactId>wildfly-arquillian-common</artifactId>
+					<version>${wildfly.version}</version>
+					<scope>test</scope>
+				</dependency>
+		    </dependencies>
+		</profile>
+	</profiles>
     
     <build>
 		<finalName>${project.artifactId}</finalName>
@@ -38,7 +104,37 @@
 				<groupId>org.wildfly.plugins</groupId>
 				<artifactId>wildfly-maven-plugin</artifactId>
 				<version>1.0.0.Beta1</version>
+				<configuration>
+					<jbossHome>${wildfly.home}</jbossHome>
+					<version>${wildfly.version}</version>
+				</configuration>
 			</plugin>
+		 <plugin>
+		         <groupId>org.apache.maven.plugins</groupId>
+		         <artifactId>maven-dependency-plugin</artifactId>
+		         <version>2.8</version>
+		         <executions>
+		           <execution>
+		             <id>unpack</id>
+		             <goals>
+		               <goal>unpack</goal>
+		             </goals>
+		             <configuration>
+		               <artifactItems>
+		                 <artifactItem>
+							  <groupId>org.wildfly</groupId>
+							  <artifactId>wildfly-dist</artifactId>
+							  <version>8.0.0.CR1</version>
+							  <type>zip</type>
+		                   <overWrite>false</overWrite>
+		                   <outputDirectory>${wildfly.home.dir}</outputDirectory>
+		                 </artifactItem>
+		               </artifactItems>
+					   <stripVersion>true</stripVersion>
+		             </configuration>
+		           </execution>
+		         </executions>
+		       </plugin>
 		</plugins>
 	</build>
 </project>
