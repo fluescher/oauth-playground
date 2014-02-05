@@ -8,7 +8,6 @@
 		<artifactId>oauth-playground</artifactId>
 		<version>1.0-SNAPSHOT</version>
     </parent>
-	<groupId>com.zuehlke.oauth</groupId>
     <artifactId>oauth-client</artifactId>
     <packaging>war</packaging>
 

@@ -8,11 +8,10 @@
 		<version>1.0-SNAPSHOT</version>
     </parent>
 	
-    <groupId>com.zuehlke.oauth</groupId>
     <artifactId>oauth-server</artifactId>
     <packaging>war</packaging>
-    <version>1.0-SNAPSHOT</version>
     <name>oauth-playground Server</name>
+    
     <dependencies>
 		<dependency>
 			<groupId>javax.ws.rs</groupId>
