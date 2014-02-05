@@ -5,14 +5,14 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
-/** Example resource class hosted at the URI path "/myresource"
+/** Example resource class hosted at the URI path "/"
  */
-@Path("/myresource")
-public class MyResource {
+@Path("/")
+public class SecuredResource {
     
     @GET 
     @Produces("text/plain")
     public String getIt() {
-        return "Hi there!";
+        return "Hi there!\n";
     }
 }
