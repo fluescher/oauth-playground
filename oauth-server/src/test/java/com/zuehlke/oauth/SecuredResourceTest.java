@@ -17,6 +17,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static com.jayway.restassured.RestAssured.*;
+import static org.hamcrest.Matchers.*;
+
 @RunWith(Arquillian.class)
 @RunAsClient
 public class SecuredResourceTest {
@@ -33,17 +36,27 @@ public class SecuredResourceTest {
     @ArquillianResource URL deploymentUrl;
     
     @Test
-    public void testAccessWithoutToken() throws Exception {
-        // GET http://localhost:8080/test/rest/customer/1
+    public void testAccessWithoutToken_Resteasy() throws Exception {
         ClientRequest request = new ClientRequest(deploymentUrl.toString() + RESOURCE_PREFIX);
         request.header("Accept", MediaType.TEXT_PLAIN);
 
-        // we're expecting a String back
         ClientResponse<String> responseObj = request.get(String.class);
 
         Assert.assertEquals(200, responseObj.getStatus());
 
         String response = responseObj.getEntity().trim();
         Assert.assertEquals("Hi there!", response);
+    }
+    
+    @Test
+    public void testAccessWithoutToken_RestAssured() {
+       get(path(""))
+           .then()
+               .statusCode(200)
+               .body(equalTo("Hi there!\n"));
+    }
+    
+    private String path(String path) {
+        return deploymentUrl.toString() + RESOURCE_PREFIX + path;
     }
 }
