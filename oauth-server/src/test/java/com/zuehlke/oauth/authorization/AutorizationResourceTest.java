@@ -2,6 +2,7 @@ package com.zuehlke.oauth.authorization;
 
 import static com.jayway.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.net.URL;
@@ -9,6 +10,12 @@ import java.net.URL;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Response;
 
+import org.apache.oltu.oauth2.client.OAuthClient;
+import org.apache.oltu.oauth2.client.URLConnectionClient;
+import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
+import org.apache.oltu.oauth2.client.response.OAuthJSONAccessTokenResponse;
+import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
+import org.apache.oltu.oauth2.common.message.types.GrantType;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
@@ -117,6 +124,32 @@ public class AutorizationResourceTest {
                .statusCode(Response.Status.BAD_REQUEST.getStatusCode())
                .contentType(ContentType.JSON)
                .body("error", equalTo("invalid_request"));
+    }
+    
+    @Test
+    public void test_OLTU_Client_Valid() throws Exception {
+        OAuthClientRequest request = OAuthClientRequest
+                .tokenLocation(path("auth/token"))
+                .setGrantType(GrantType.CLIENT_CREDENTIALS)
+                .setClientId("abcd")
+                .setClientSecret("BLOBBER_CRED")
+                .buildBodyMessage();
+        OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
+        
+        OAuthJSONAccessTokenResponse response = oAuthClient.accessToken(request);
+
+        assertNotNull(response.getAccessToken());
+    }
+    
+    @Test(expected = OAuthProblemException.class)
+    public void test_OLTU_Client_In_Valid() throws Exception {
+        OAuthClientRequest request = OAuthClientRequest.tokenLocation(path("auth/token"))
+                .setGrantType(GrantType.CLIENT_CREDENTIALS).setClientId("wrong_client_id")
+                .setClientSecret("clearly wrong").buildBodyMessage();
+
+        OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
+
+        oAuthClient.accessToken(request);
     }
     
     private String path(String path) {
