@@ -1,7 +1,9 @@
 package com.zuehlke.oauth.authorization;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.inject.Singleton;
@@ -11,10 +13,12 @@ import javax.inject.Singleton;
  */
 @Singleton
 public class AuthorizationServer {
+    private final static long TOKEN_EXPIRATION_TIME_MS = 60 * 1000;
+    
     /** Map ClientId -> secret */
     private final Map<String, String> clients = new HashMap<>();
     /** Map bearer token -> authorization */
-    private final Map<String, Long> authTokens = new ConcurrentHashMap<>(); 
+    private final Map<String, Token> authTokens = new ConcurrentHashMap<>(); 
     
     public AuthorizationServer() {
         /* register dummy users */
@@ -28,12 +32,54 @@ public class AuthorizationServer {
         return OK_RESPONSE;
     }
     
-    public void registerToken(String token) {
-        authTokens.put(token, System.currentTimeMillis());
+    public Token getTokenInformation(String tokenId) {
+        return authTokens.get(tokenId);
     }
     
-    public boolean isValidToken(String token) {
-        return authTokens.containsKey(token);
+    public void registerToken(String token, String clientId, Set<String> scopes) {
+        authTokens.put(token, new Token(clientId, scopes, System.currentTimeMillis()));
+    }
+    
+    public boolean isValidToken(String tokenId) {
+        if(!authTokens.containsKey(tokenId))
+            return false;
+        
+        Token token = authTokens.get(tokenId);
+        if(System.currentTimeMillis() - token.getIssueTime() > TOKEN_EXPIRATION_TIME_MS) {
+            removeToken(tokenId);
+            return false;
+        }
+        
+        return true;
+    }
+    
+    private void removeToken(String tokenId) {
+        authTokens.remove(tokenId);
+    }
+
+    public static class Token {
+        private final String clientId;
+        private final Set<String> scopes;
+        private final long issueTime;
+        
+        public Token(String id, Set<String> scopes, long time) {
+            this.clientId = id;
+            this.scopes = Collections.unmodifiableSet(scopes);
+            this.issueTime = time;
+        }
+        
+        public String getClientId() {
+            return clientId;
+        }
+        
+        public Set<String> getScope() {
+            return scopes;
+        }
+
+        public long getIssueTime() {
+            return issueTime;
+        }
+        
     }
     
     public interface AuthorizationResponse {

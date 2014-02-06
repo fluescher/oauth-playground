@@ -1,5 +1,8 @@
 package com.zuehlke.oauth.resource;
 
+import static com.jayway.restassured.RestAssured.*;
+import static org.hamcrest.Matchers.*;
+
 import java.net.URL;
 
 import javax.ws.rs.ApplicationPath;
@@ -18,10 +21,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.zuehlke.oauth.OAuthApplication;
-import com.zuehlke.oauth.resource.SecuredResource;
-
-import static com.jayway.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.*;
 
 @RunWith(Arquillian.class)
 @RunAsClient
