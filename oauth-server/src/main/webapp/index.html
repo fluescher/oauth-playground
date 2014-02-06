@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OAuth demo site</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1" name="viewport"></meta>
+    
+    <script type="text/javascript" src="js/api.js"></script>
+    <script type="text/javascript">
+        playground.obtainToken(showButton);
+
+        function showButton() {
+            document.getElementById("optionsButton").disabled = false;
+        }
+        
+        function showResponse(response) {
+            document.getElementById("response").value = response;        
+        }        
+    </script>
+    
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 style="margin-bottom: 30px;">OAuth JS Demo App</h1>
+        <div class="row">
+            <div class="col-md-2">
+                <button id="optionsButton" disabled class="btn btn-lg btn-success" type="button"
+                    onclick="playground.getOptions(showResponse)">Get Options!</button>
+            </div>
+            <div class="col-md-10">
+                <textarea id="response" class="span6" rows="3" placeholder="No Response Yet" required style="width: 800px; height: 100px;"></textarea>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

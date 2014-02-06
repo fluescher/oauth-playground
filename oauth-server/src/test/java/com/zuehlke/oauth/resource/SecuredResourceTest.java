@@ -39,7 +39,7 @@ public class SecuredResourceTest {
     
     @Test
     public void testAccessWithoutToken_Resteasy() throws Exception {
-        ClientRequest request = new ClientRequest(deploymentUrl.toString() + RESOURCE_PREFIX);
+        ClientRequest request = new ClientRequest(path("/options"));
         request.header("Accept", MediaType.TEXT_PLAIN);
 
         ClientResponse<String> responseObj = request.get(String.class);
@@ -56,7 +56,7 @@ public class SecuredResourceTest {
             .request()
                 .header("Accept", MediaType.TEXT_PLAIN)
         .then()
-            .get(path(""))
+            .get(path("/options"))
                 .then()
                    .statusCode(200)
                    .body(equalTo("Hi there!\n"));

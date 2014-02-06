@@ -12,7 +12,15 @@ public class SecuredResource {
     
     @GET 
     @Produces("text/plain")
-    public String getIt() {
+    @Path("/options")
+    public String getOptions() {
+        return "Hi there!\n";
+    }
+    
+    @GET 
+    @Produces("text/plain")
+    @Path("/allOptions")
+    public String getAllOptions() {
         return "Hi there!\n";
     }
     
