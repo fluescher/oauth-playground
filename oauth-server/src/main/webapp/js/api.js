@@ -1,15 +1,16 @@
 var playground = {
 	apiEndpoint: "http://localhost:8080/oauth-server/api/",
+	obtainTokenEndpoint: "http://localhost:8080/oauth-server/webapp/obtainToken",
 	token: "",
 	
 	obtainToken: function(goodCallback) {
 		var request = new XMLHttpRequest();
-		request.open("POST", "http://localhost:8080/oauth-server/webapp/obtainToken");
+		request.open("POST", obtainTokenEndpoint);
 		request.onreadystatechange = function() {
 			if(request.readyState == 4) {
 				if(request.status == 200) {
-					console.log("GOT Token: " + request.responseText);
-					playground.token = request.responseText;
+					playground.token = JSON.parse(request.responseText).access_token;
+					console.log("GOT Token: " + playground.token);
 					goodCallback();
 				} else {
 					console.log("Could not get token ["+request.status+"]: " + request.responseText);

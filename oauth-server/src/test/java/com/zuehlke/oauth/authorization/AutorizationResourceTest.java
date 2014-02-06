@@ -214,6 +214,6 @@ public class AutorizationResourceTest {
     }
     
     private String path(String path) {
-        return deploymentUrl.toString() + RESOURCE_PREFIX + path;
+        return deploymentUrl.toString() + RESOURCE_PREFIX +"/"+ path;
     }
 }

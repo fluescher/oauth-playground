@@ -63,6 +63,7 @@ public class AutorizationResource {
                 return doClientCredentialAuth(oauthRequest, oauthIssuer, authResponse);
                 
             } catch (OAuthProblemException oAuthProblem) {
+                System.out.println(oAuthProblem);
                 return createErrorResponse(oAuthProblem);
             } 
         }
