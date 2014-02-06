@@ -79,7 +79,7 @@ public class AutorizationResource {
             final OAuthAccessResourceRequest oauthRequest = new OAuthAccessResourceRequest(request);
             final String token = oauthRequest.getAccessToken();
             
-            if(!authServer.isValidToken(token)){
+            if(!authServer.isValidToken(token)) {
                 OAuthResponse oauthResponse = OAuthRSResponse
                                                 .errorResponse(HttpServletResponse.SC_UNAUTHORIZED)
                                                 .setError(OAuthError.ResourceResponse.INVALID_TOKEN)
