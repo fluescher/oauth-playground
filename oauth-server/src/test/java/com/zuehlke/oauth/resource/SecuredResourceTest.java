@@ -1,4 +1,4 @@
-package com.zuehlke.oauth;
+package com.zuehlke.oauth.resource;
 
 import java.net.URL;
 
@@ -16,6 +16,9 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import com.zuehlke.oauth.OAuthApplication;
+import com.zuehlke.oauth.resource.SecuredResource;
 
 import static com.jayway.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
