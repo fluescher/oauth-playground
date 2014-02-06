@@ -15,4 +15,5 @@ public class SecuredResource {
     public String getIt() {
         return "Hi there!\n";
     }
+    
 }

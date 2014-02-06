@@ -53,10 +53,14 @@ public class SecuredResourceTest {
     
     @Test
     public void testAccessWithoutToken_RestAssured() {
-       get(path(""))
-           .then()
-               .statusCode(200)
-               .body(equalTo("Hi there!\n"));
+        given()
+            .request()
+                .header("Accept", MediaType.TEXT_PLAIN)
+        .then()
+            .get(path(""))
+                .then()
+                   .statusCode(200)
+                   .body(equalTo("Hi there!\n"));
     }
     
     private String path(String path) {
