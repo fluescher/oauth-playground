@@ -93,10 +93,8 @@ public class AutorizationResource {
             
             return Response.ok().entity(authServer.getTokenInformation(token)).build();
         } catch (OAuthProblemException oAuthProblem) {
-            oAuthProblem.printStackTrace(System.err);
             return Response.status(Response.Status.UNAUTHORIZED).build();
         } catch (OAuthSystemException oAuthProblem) {
-            oAuthProblem.printStackTrace(System.err);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         } 
     }
@@ -134,7 +132,6 @@ public class AutorizationResource {
                     .setError(OAuthError.TokenResponse.UNSUPPORTED_GRANT_TYPE)
                     .setErrorDescription("Only client grant is supported")
                     .buildJSONMessage();
-        System.out.println(response.getBody());
         return Response.status(response.getResponseStatus()).entity(response.getBody()).build();
     }
 
