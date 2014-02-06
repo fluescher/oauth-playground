@@ -12,18 +12,6 @@
     <packaging>war</packaging>
     <name>oauth-playground REST Server</name>
     
-    <dependencyManagement>
-	    <dependencies>
-	        <dependency>
-	            <groupId>org.jboss.arquillian</groupId>
-	            <artifactId>arquillian-bom</artifactId>
-	            <version>1.1.2.Final</version>
-	            <scope>import</scope>
-	            <type>pom</type>
-	        </dependency>
-	    </dependencies>
-    </dependencyManagement>
-    
     <dependencies>
 		<dependency>
 			<groupId>javax.ws.rs</groupId>
@@ -32,6 +20,12 @@
 			<scope>provided</scope>
 		</dependency>
 	
+		<dependency>
+			<groupId>org.apache.oltu.oauth2</groupId>
+			<artifactId>org.apache.oltu.oauth2.authzserver</artifactId>
+			<version>0.31</version>
+		</dependency>
+		
 		<dependency>
       		<groupId>com.jayway.restassured</groupId>
       		<artifactId>rest-assured</artifactId>
@@ -45,6 +39,13 @@
             <version>4.8.2</version>
             <scope>test</scope>
         </dependency>
+        
+		<dependency>
+    		<groupId>org.jboss.shrinkwrap.resolver</groupId>
+    		<artifactId>shrinkwrap-resolver-depchain</artifactId>
+    		<scope>test</scope>
+    		<type>pom</type>
+		</dependency> 
 
          <dependency>
             <groupId>org.jboss.arquillian.junit</groupId>
@@ -61,11 +62,29 @@
 		
     </dependencies>
     
+     <dependencyManagement>
+	    <dependencies>
+		    <dependency>
+				<groupId>org.jboss.shrinkwrap.resolver</groupId>
+				<artifactId>shrinkwrap-resolver-bom</artifactId>
+				<version>2.0.0</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+	        <dependency>
+	            <groupId>org.jboss.arquillian</groupId>
+	            <artifactId>arquillian-bom</artifactId>
+	            <version>1.1.2.Final</version>
+	            <scope>import</scope>
+	            <type>pom</type>
+	        </dependency>
+	    </dependencies>
+    </dependencyManagement>
+    
     <properties>
         <wildfly.version>8.0.0.CR1</wildfly.version>
 		<wildfly.home.dir>${project.build.directory}/server</wildfly.home.dir>
        	<wildfly.home>${wildfly.home.dir}/wildfly-${wildfly.version}</wildfly.home>
-<!--        	<jboss.home>${wildfly.home}</jboss.home> -->
     </properties>
 
 	<profiles>
@@ -116,31 +135,31 @@
 					<version>${wildfly.version}</version>
 				</configuration>
 			</plugin>
-		 <plugin>
-		         <groupId>org.apache.maven.plugins</groupId>
-		         <artifactId>maven-dependency-plugin</artifactId>
-		         <version>2.8</version>
-		         <executions>
-		           <execution>
-		             <id>unpack</id>
-		             <goals>
-		               <goal>unpack</goal>
-		             </goals>
-		             <configuration>
-		               <artifactItems>
-		                 <artifactItem>
-							  <groupId>org.wildfly</groupId>
-							  <artifactId>wildfly-dist</artifactId>
-							  <version>8.0.0.CR1</version>
-							  <type>zip</type>
-		                   <overWrite>false</overWrite>
-		                   <outputDirectory>${wildfly.home.dir}</outputDirectory>
-		                 </artifactItem>
-		               </artifactItems>
-					   <stripVersion>true</stripVersion>
-		             </configuration>
-		           </execution>
-		         </executions>
+		 	<plugin>
+	        	<groupId>org.apache.maven.plugins</groupId>
+	        	<artifactId>maven-dependency-plugin</artifactId>
+	        	<version>2.8</version>
+		        	<executions>
+						<execution>
+							<id>unpack</id>
+							<goals>
+								<goal>unpack</goal>
+							</goals>
+							<configuration>
+								<artifactItems>
+									<artifactItem>
+										<groupId>org.wildfly</groupId>
+										<artifactId>wildfly-dist</artifactId>
+										<version>8.0.0.CR1</version>
+										<type>zip</type>
+										<overWrite>false</overWrite>
+										<outputDirectory>${wildfly.home.dir}</outputDirectory>
+									</artifactItem>
+								</artifactItems>
+								<stripVersion>true</stripVersion>
+							</configuration>
+						</execution>
+		       		</executions>
 		       </plugin>
 		</plugins>
 	</build>
