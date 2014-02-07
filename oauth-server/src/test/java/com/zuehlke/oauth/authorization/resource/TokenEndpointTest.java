@@ -27,8 +27,9 @@ import org.junit.runner.RunWith;
 
 import com.jayway.restassured.http.ContentType;
 import com.zuehlke.oauth.OAuthApplication;
+import com.zuehlke.oauth.authorization.AuthorizationServer;
 import com.zuehlke.oauth.authorization.RestTest;
-import com.zuehlke.oauth.authorization.resource.TokenEndpoint;
+import com.zuehlke.oauth.authorization.impl.AuthorizationServerImpl;
 
 @RunWith(Arquillian.class)
 @RunAsClient
@@ -44,6 +45,8 @@ public class TokenEndpointTest extends RestTest {
         return ShrinkWrap.create(WebArchive.class, "test.war")
                 .addPackage(TokenEndpoint.class.getPackage())
                 .addClass(OAuthApplication.class)
+                .addClass(AuthorizationServer.class)
+                .addClass(AuthorizationServerImpl.class)
                 .addAsLibraries(deps);
     }
     
@@ -161,6 +164,8 @@ public class TokenEndpointTest extends RestTest {
                                         .setAccessToken(token)
                                         .buildHeaderMessage();
         OAuthResourceResponse response = client.resource(request, "GET", OAuthResourceResponse.class);
+        
+        assertFalse(response.getBody().isEmpty());
     }
 
     @Test

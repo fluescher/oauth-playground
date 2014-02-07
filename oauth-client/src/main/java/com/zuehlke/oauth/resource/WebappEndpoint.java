@@ -1,9 +1,11 @@
 package com.zuehlke.oauth.resource;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Properties;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,16 +16,26 @@ import javax.servlet.http.HttpServletResponse;
 public class WebappEndpoint extends HttpServlet {
 
     private static final long serialVersionUID = -4057891155116975629L;
-    private static final String HOST = "http://oauthplayground-florianluescher.rhcloud.com";
     private static final String AUTH_ENDPOINT = "/oauth-server/api/auth/token";
     private static final String CLIENT_ID = "abcd";
     private static final String CLIENT_SECRET = "BLOBBER_CRED";
-
+    private String port;
+    
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) {
+    public void init()  {
         try {
-            final String host = HOST;
-            System.out.println(host);
+            final Properties properties = new Properties();
+            properties.load(WebappEndpoint.class.getResourceAsStream("/oauth-client.properties"));
+            this.port = properties.getProperty("port");
+        } catch(Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+    
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            final String host = request.getScheme() + "://" + request.getServerName() + ":" + port;
             final String scopes = request.getParameter("scope").replace(" ", "%20");
             
             URL url = new URL(host+ AUTH_ENDPOINT + "?grant_type=client_credentials"
