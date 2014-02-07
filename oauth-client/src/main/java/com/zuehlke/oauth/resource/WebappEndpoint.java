@@ -22,6 +22,7 @@ public class WebappEndpoint extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
         try {
             final String host = "http://" + request.getServerName() + ':' + request.getServerPort();
+            System.out.println(host);
             final String scopes = request.getParameter("scope").replace(" ", "%20");
             
             URL url = new URL(host+ AUTH_ENDPOINT + "?grant_type=client_credentials"
