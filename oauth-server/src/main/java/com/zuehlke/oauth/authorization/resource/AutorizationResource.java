@@ -1,4 +1,4 @@
-package com.zuehlke.oauth.authorization;
+package com.zuehlke.oauth.authorization.resource;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +25,7 @@ import org.apache.oltu.oauth2.common.message.types.GrantType;
 import org.apache.oltu.oauth2.rs.request.OAuthAccessResourceRequest;
 import org.apache.oltu.oauth2.rs.response.OAuthRSResponse;
 
+import com.zuehlke.oauth.authorization.AuthorizationServer;
 import com.zuehlke.oauth.authorization.AuthorizationServer.AuthorizationResponse;
 
 /**

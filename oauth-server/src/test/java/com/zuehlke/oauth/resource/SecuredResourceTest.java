@@ -2,67 +2,102 @@ package com.zuehlke.oauth.resource;
 
 import static com.jayway.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 
-import java.net.URL;
+import java.io.File;
 
-import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.MediaType;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.resteasy.client.ClientRequest;
 import org.jboss.resteasy.client.ClientResponse;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.zuehlke.oauth.OAuthApplication;
+import com.zuehlke.oauth.authorization.AuthorizationServer;
+import com.zuehlke.oauth.authorization.OAuthTest;
+import com.zuehlke.oauth.authorization.impl.AuthorizationServerMock;
+import com.zuehlke.oauth.resource.auth.OAuthFilter;
 
 @RunWith(Arquillian.class)
 @RunAsClient
-public class SecuredResourceTest {
+public class SecuredResourceTest extends OAuthTest {
 
-    private static final String RESOURCE_PREFIX = OAuthApplication.class.getAnnotation(ApplicationPath.class).value().substring(1);
-    
     @Deployment(testable=false)
     public static WebArchive createDeployment() {
+        File[] deps = Maven.resolver()
+                .loadPomFromFile("pom.xml")
+                .importRuntimeDependencies()
+                .resolve().withTransitivity().asFile();
+        
         return ShrinkWrap.create(WebArchive.class, "test.war")
                 .addPackage(SecuredResource.class.getPackage())
-                .addClass(OAuthApplication.class);
+                .addPackage(OAuthFilter.class.getPackage())
+                .addClass(OAuthApplication.class)
+                .addClass(AuthorizationServer.class)
+                .addClass(AuthorizationServerMock.class)
+                .addAsLibraries(deps);
     }
-    
-    @ArquillianResource URL deploymentUrl;
     
     @Test
     public void testAccessWithoutToken_Resteasy() throws Exception {
-        ClientRequest request = new ClientRequest(path("/options"));
-        request.header("Accept", MediaType.TEXT_PLAIN);
+        ClientRequest request = new ClientRequest(path("options"));
+        request.header("Accept", MediaType.APPLICATION_JSON);
 
         ClientResponse<String> responseObj = request.get(String.class);
 
-        Assert.assertEquals(200, responseObj.getStatus());
+        Assert.assertEquals(400, responseObj.getStatus());
 
         String response = responseObj.getEntity().trim();
-        Assert.assertEquals("Hi there!", response);
+        assertTrue(response.contains("Missing authorization header"));
     }
     
     @Test
     public void testAccessWithoutToken_RestAssured() {
         given()
             .request()
-                .header("Accept", MediaType.TEXT_PLAIN)
+                .header("Accept", MediaType.APPLICATION_JSON)
         .then()
-            .get(path("/options"))
+            .get(path("options"))
                 .then()
-                   .statusCode(200)
-                   .body(equalTo("Hi there!\n"));
+                   .statusCode(400);
     }
     
-    private String path(String path) {
-        return deploymentUrl.toString() + RESOURCE_PREFIX + path;
+    @Test
+    public void testAccessWith_Valid_Token() throws Exception {
+        final String token = AuthorizationServerMock.VALID_TOKEN;
+        
+        given()
+        .request()
+            .header("Accept", MediaType.APPLICATION_JSON)
+            .header("Authorization", "Bearer " + token)
+        .then()
+            .get(path("options"))
+               .then()
+               .statusCode(200)
+               .body(equalTo("Hi there!\n"));
     }
+    
+    @Test
+    public void testAccessWith_InValid_Token() throws Exception {
+        final String token = "ASDF_BLOBBER";
+        
+        given()
+        .request()
+            .header("Accept", MediaType.APPLICATION_JSON)
+            .header("Authorization", "Bearer " + token)
+        .then()
+            .get(path("options"))
+               .then()
+               .statusCode(401)
+               .body("error_description", equalTo("Invalid token"));
+    }
+    
 }

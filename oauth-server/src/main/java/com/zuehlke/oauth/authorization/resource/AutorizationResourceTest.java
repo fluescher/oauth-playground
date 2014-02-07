@@ -1,13 +1,11 @@
-package com.zuehlke.oauth.authorization;
+package com.zuehlke.oauth.authorization.resource;
 
 import static com.jayway.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.net.URL;
 
-import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Response;
 
 import org.apache.oltu.oauth2.client.OAuthClient;
@@ -17,12 +15,10 @@ import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
 import org.apache.oltu.oauth2.client.response.OAuthJSONAccessTokenResponse;
 import org.apache.oltu.oauth2.client.response.OAuthResourceResponse;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
-import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.types.GrantType;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
@@ -31,13 +27,13 @@ import org.junit.runner.RunWith;
 
 import com.jayway.restassured.http.ContentType;
 import com.zuehlke.oauth.OAuthApplication;
+import com.zuehlke.oauth.authorization.OAuthTest;
+import com.zuehlke.oauth.authorization.resource.AutorizationResource;
 
 @RunWith(Arquillian.class)
 @RunAsClient
-public class AutorizationResourceTest {
+public class AutorizationResourceTest extends OAuthTest {
 
-    private static final String RESOURCE_PREFIX = OAuthApplication.class.getAnnotation(ApplicationPath.class).value().substring(1);
-    
     @Deployment(testable=false)
     public static WebArchive createDeployment() {
         File[] deps = Maven.resolver()
@@ -50,8 +46,6 @@ public class AutorizationResourceTest {
                 .addClass(OAuthApplication.class)
                 .addAsLibraries(deps);
     }
-    
-    @ArquillianResource URL deploymentUrl;
     
     @Test
     public void testGetToken_ClientCredentialGrant_Valid_Credentials() {
@@ -199,21 +193,5 @@ public class AutorizationResourceTest {
 
         oAuthClient.accessToken(request);
     }
-    
-    private String getAccessToken() throws OAuthSystemException, OAuthProblemException {
-        OAuthClientRequest request = OAuthClientRequest
-                .tokenLocation(path("auth/token"))
-                .setGrantType(GrantType.CLIENT_CREDENTIALS)
-                .setClientId("abcd")
-                .setClientSecret("BLOBBER_CRED")
-                .buildBodyMessage();
-        OAuthClient client = new OAuthClient(new URLConnectionClient());
-        OAuthJSONAccessTokenResponse response = client.accessToken(request);
-        String token = response.getAccessToken();
-        return token;
-    }
-    
-    private String path(String path) {
-        return deploymentUrl.toString() + RESOURCE_PREFIX +"/"+ path;
-    }
+   
 }
