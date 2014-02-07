@@ -17,6 +17,10 @@
 		<servlet.version>3.0.1</servlet.version>
 	</properties>
 	
+	<build>
+		<finalName>${project.artifactId}</finalName>
+	</build>
+	
     <dependencies>
 		<dependency>
 			<groupId>javax.servlet</groupId>
