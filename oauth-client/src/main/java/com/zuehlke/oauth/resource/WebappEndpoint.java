@@ -14,16 +14,17 @@ import javax.servlet.http.HttpServletResponse;
 public class WebappEndpoint extends HttpServlet {
 
     private static final long serialVersionUID = -4057891155116975629L;
-    private static final String AUTH_ENDPOINT = "http://localhost:8080/oauth-server/api/auth/token";
+    private static final String AUTH_ENDPOINT = "/oauth-server/api/auth/token";
     private static final String CLIENT_ID = "abcd";
     private static final String CLIENT_SECRET = "BLOBBER_CRED";
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
         try {
+            final String host = "http://" + request.getServerName() + ':' + request.getServerPort();
             final String scopes = request.getParameter("scope").replace(" ", "%20");
             
-            URL url = new URL(AUTH_ENDPOINT + "?grant_type=client_credentials"
+            URL url = new URL(host+ AUTH_ENDPOINT + "?grant_type=client_credentials"
                                             + "&client_id="+CLIENT_ID+""
                                             + "&client_secret="+CLIENT_SECRET
                                             + "&scope="+scopes); 

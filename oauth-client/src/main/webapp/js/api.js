@@ -1,5 +1,5 @@
 var playground = {
-	apiEndpoint: "http://localhost:8080/oauth-server/api/",
+	apiEndpoint: "/oauth-server/api/",
 	obtainTokenEndpoint: "obtainToken",
 	token: "",
 	scopes: [],
