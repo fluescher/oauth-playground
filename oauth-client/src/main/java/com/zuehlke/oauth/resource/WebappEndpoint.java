@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 public class WebappEndpoint extends HttpServlet {
 
     private static final long serialVersionUID = -4057891155116975629L;
+    private static final String HOST = "localhost";
     private static final String AUTH_ENDPOINT = "/oauth-server/api/auth/token";
     private static final String CLIENT_ID = "abcd";
     private static final String CLIENT_SECRET = "BLOBBER_CRED";
@@ -21,7 +22,7 @@ public class WebappEndpoint extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
         try {
-            final String host = request.getScheme()+"://" + request.getServerName() + ':' + request.getServerPort();
+            final String host = request.getScheme()+":// "+HOST+" :" + request.getServerPort();
             System.out.println(host);
             final String scopes = request.getParameter("scope").replace(" ", "%20");
             
