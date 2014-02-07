@@ -1,5 +1,7 @@
 package com.zuehlke.oauth.authorization.resource;
 
+import java.util.Set;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -118,11 +120,21 @@ public class TokenEndpoint {
                 .setAccessToken(token)
                 .setTokenType("Bearer")
                 .setExpiresIn(String.valueOf(EXPIRE_TIME_IN_SECONDS))
+                .setScope(toScopeString(authRequest.getScopes()))
                 .buildJSONMessage();
         
         return Response.status(response.getResponseStatus()).entity(response.getBody()).build();
     }
 
+    private String toScopeString(Set<String> scopes) {
+        StringBuilder builder = new StringBuilder();
+        for(String scope : scopes) {
+            builder.append(scope);
+            builder.append(" ");
+        }
+        return builder.toString().trim();
+    }
+    
     private boolean isClientCredentialGrant(final OAuthTokenRequest oauthRequest) {
         return GrantType.CLIENT_CREDENTIALS.toString().equals(oauthRequest.getGrantType());
     }

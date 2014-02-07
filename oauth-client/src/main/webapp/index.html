@@ -14,13 +14,26 @@
         }
         
         function showButtons() {
-            document.getElementById("optionsButton").disabled = false;
-            document.getElementById("allOptionsButton").disabled = false;
+        	document.getElementById("optionsButton").disabled = true;
+        	document.getElementById("allOptionsButton").disabled = true;
+            
+            if(playground.scopes.indexOf("options") !== -1)
+                document.getElementById("optionsButton").disabled = false;
+
+            if(playground.scopes.indexOf("allOptions") !== -1)
+                document.getElementById("allOptionsButton").disabled = false;
+            
+            showTokenInfo();
         }
         
         function showResponse(response) {
             document.getElementById("response").value = response;        
-        }        
+        }
+
+        function showTokenInfo() {
+            document.getElementById("accessToken").value = playground.token;
+            document.getElementById("grantedScopes").value = playground.scopes;
+        }
     </script>
     
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
@@ -28,6 +41,7 @@
 <body>
     <div class="container">
         <h1 style="margin-bottom: 30px;">OAuth JS Demo App</h1>
+        <hr />
         <div class="row" style="margin-bottom: 30px">
             <div class="col-md-12">
                 <button id="obtainBothTokens" class="btn btn-lg btn-success" type="button"
@@ -35,8 +49,8 @@
             </div>
         </div>
         <h2>Obtain a OAuth token!</h2>
-        
-        <h3>With client grant of our webserver</h3>
+        <hr />
+        <h3>Using client grant of our webserver</h3>
         <div class="row" style="margin-bottom: 30px">
             <div class="col-md-4">
                 <button id="obtainOptionsToken" class="btn btn-lg btn-success" type="button"
@@ -52,6 +66,23 @@
             </div> 
         </div>
         <h2>Query the API!</h2>
+        <hr />
+        <div class="row">
+            <div class="col-md-2">
+                <label>Your access token:</label>
+            </div>
+            <div class="col-md-10">
+                <input type="text" style="width: 100%" id="accessToken" disabled="disabled" />
+            </div>
+        </div>
+        <div class="row" style="margin-botton: 30px;">
+            <div class="col-md-2">
+                <label>Your granted scopes:</label>
+            </div>
+            <div class="col-md-10">
+                <input type="text" style="width: 100%" id="grantedScopes" disabled="disabled" />
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-2">
                 <button id="optionsButton" disabled class="btn btn-lg btn-success" type="button"
@@ -60,7 +91,7 @@
                     onclick="playground.getAllOptions(showResponse)" style="width: 180px;">Get All Options!</button>
             </div>
             <div class="col-md-10">
-                <textarea id="response" class="span6" rows="3" placeholder="No Response Yet" required style="width: 800px; height: 100px;"></textarea>
+                <textarea id="response" class="span6" rows="3" placeholder="No Response Yet" required style="width: 100%; height: 100px;"></textarea>
             </div>
         </div>
     </div>

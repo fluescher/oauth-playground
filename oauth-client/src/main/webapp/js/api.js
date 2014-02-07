@@ -10,8 +10,9 @@ var playground = {
 		request.onreadystatechange = function() {
 			if(request.readyState == 4) {
 				if(request.status == 200) {
-					playground.token = JSON.parse(request.responseText).access_token;
-					console.log("GOT Token: " + playground.token);
+					var response = JSON.parse(request.responseText);
+					playground.token = response.access_token;
+					playground.scopes = response.scope.split(" ");
 					goodCallback();
 				} else {
 					console.log("Could not get token ["+request.status+"]: " + request.responseText);
