@@ -29,19 +29,19 @@ import com.zuehlke.oauth.authorization.AuthorizationServer;
 import com.zuehlke.oauth.authorization.AuthorizationServer.AuthorizationResponse;
 
 /**
- * OAuth Authorisation Server. 
+ * OAuth Token Endpoint. 
  */
 @Path("/auth")
-public class AutorizationResource {
+public class TokenEndpoint {
 
     private static final int EXPIRE_TIME_IN_SECONDS = 3600;
     @Inject
     private AuthorizationServer authServer;
 
-    public AutorizationResource() {
+    public TokenEndpoint() {
     }
     
-    public AutorizationResource(AuthorizationServer server) {
+    public TokenEndpoint(AuthorizationServer server) {
         this.authServer = server;
     }
     

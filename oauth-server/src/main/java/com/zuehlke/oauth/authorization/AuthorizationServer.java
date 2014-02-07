@@ -13,6 +13,8 @@ public interface AuthorizationServer {
 
     public abstract boolean isValidToken(String tokenId);
     
+    public abstract boolean isValidToken(String tokenId, String[] scopes);
+    
     public static class Token {
         private final String clientId;
         private final Set<String> scopes;

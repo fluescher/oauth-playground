@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
@@ -27,23 +28,29 @@ public class OAuthFilter implements ContainerRequestFilter {
 
     @Inject
     private AuthorizationServer authServer;
+    
     private HttpServletRequest request;
     
     public void setAuthorizationServer(AuthorizationServer server) {
         authServer = server;
     }
     
+    @Context
+    private ResourceInfo info;
+    
     @Override
     public void filter(ContainerRequestContext context) throws IOException {
+        final OAuthRequired oauthInfo = info.getResourceMethod().getAnnotation(OAuthRequired.class);
+        final String[] scopes = oauthInfo.scopes();
         try {
             try {
                 final OAuthAccessResourceRequest oauthRequest = new OAuthAccessResourceRequest(getRequest());
                 final String token = oauthRequest.getAccessToken();
                 
-                if(!authServer.isValidToken(token)) {
+                if(!authServer.isValidToken(token, scopes)) {
                     context.abortWith(createInvalidTokenResponse());
                 }
-            } catch(OAuthProblemException problemEx) {
+            } catch (OAuthProblemException problemEx) {
                 context.abortWith(createErrorResponse(problemEx));
             }
         } catch (OAuthSystemException oAuthProblem) {

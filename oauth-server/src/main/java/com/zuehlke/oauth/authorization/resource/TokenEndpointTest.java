@@ -28,11 +28,11 @@ import org.junit.runner.RunWith;
 import com.jayway.restassured.http.ContentType;
 import com.zuehlke.oauth.OAuthApplication;
 import com.zuehlke.oauth.authorization.RestTest;
-import com.zuehlke.oauth.authorization.resource.AutorizationResource;
+import com.zuehlke.oauth.authorization.resource.TokenEndpoint;
 
 @RunWith(Arquillian.class)
 @RunAsClient
-public class AutorizationResourceTest extends RestTest {
+public class TokenEndpointTest extends RestTest {
 
     @Deployment(testable=false)
     public static WebArchive createDeployment() {
@@ -42,7 +42,7 @@ public class AutorizationResourceTest extends RestTest {
                     .resolve().withTransitivity().asFile();
         
         return ShrinkWrap.create(WebArchive.class, "test.war")
-                .addPackage(AutorizationResource.class.getPackage())
+                .addPackage(TokenEndpoint.class.getPackage())
                 .addClass(OAuthApplication.class)
                 .addAsLibraries(deps);
     }

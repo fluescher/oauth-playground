@@ -1,5 +1,6 @@
 package com.zuehlke.oauth.authorization.impl;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -42,6 +43,15 @@ public class AuthorizationServerImpl implements AuthorizationServer {
     @Override
     public void registerToken(String token, String clientId, Set<String> scopes) {
         authTokens.put(token, new Token(clientId, scopes, System.currentTimeMillis()));
+    }
+    
+    @Override
+    public boolean isValidToken(String tokenId, String[] scopes) {
+        final boolean tokenValid = isValidToken(tokenId);
+        if(scopes == null || scopes.length == 0)
+            return tokenValid;
+        
+        return tokenValid && authTokens.get(tokenId).getScope().containsAll(Arrays.asList(scopes));
     }
     
     @Override

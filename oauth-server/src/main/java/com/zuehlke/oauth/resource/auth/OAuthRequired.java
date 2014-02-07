@@ -11,4 +11,5 @@ import javax.ws.rs.NameBinding;
 @Retention(value = RetentionPolicy.RUNTIME)
 @NameBinding
 public @interface OAuthRequired {
+    String[] scopes() default {};
 }

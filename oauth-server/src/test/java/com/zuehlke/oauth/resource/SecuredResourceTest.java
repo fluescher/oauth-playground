@@ -100,4 +100,18 @@ public class SecuredResourceTest extends RestTest {
                .body("error_description", equalTo("Invalid token"));
     }
     
+    @Test
+    public void testAccess_Not_In_Scope() throws Exception {
+        final String token = AuthorizationServerMock.VALID_TOKEN;
+        
+        given()
+        .request()
+            .header("Accept", MediaType.APPLICATION_JSON)
+            .header("Authorization", "Bearer " + token)
+        .then()
+            .get(path("allOptions"))
+               .then()
+               .statusCode(401)
+               .body("error_description", equalTo("Invalid token"));
+    }
 }

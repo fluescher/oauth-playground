@@ -15,7 +15,7 @@ public class SecuredResource {
     @GET 
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/options")
-    @OAuthRequired
+    @OAuthRequired(scopes={"options"})
     public String getOptions() {
         return "Hi there!\n";
     }
@@ -23,9 +23,9 @@ public class SecuredResource {
     @GET 
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/allOptions")
-    @OAuthRequired
+    @OAuthRequired(scopes={"allOption"})
     public String getAllOptions() {
-        return "Hi there!\n";
+        return "Hi there all!\n";
     }
     
 }
