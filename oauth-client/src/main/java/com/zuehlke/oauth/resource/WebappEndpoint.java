@@ -5,45 +5,40 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Application;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-@ApplicationPath("/webapp")
-@Path("/")
-public class WebappEndpoint extends Application {
+@WebServlet(urlPatterns="/obtainToken")
+public class WebappEndpoint extends HttpServlet {
 
+    private static final long serialVersionUID = -4057891155116975629L;
     private static final String AUTH_ENDPOINT = "http://localhost:8080/oauth-server/api/auth/token";
     private static final String CLIENT_ID = "abcd";
     private static final String CLIENT_SECRET = "BLOBBER_CRED";
-    
-    @POST
-    @Path("/obtainToken")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response obtainToken() {
+
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) {
         try {
             URL url = new URL(AUTH_ENDPOINT + "?grant_type=client_credentials&client_id="+CLIENT_ID+"&client_secret="+CLIENT_SECRET); 
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();           
             connection.setDoOutput(false); 
             connection.setInstanceFollowRedirects(false); 
             connection.setRequestMethod("POST"); 
-            connection.setRequestProperty("Content-Type", MediaType.APPLICATION_FORM_URLENCODED); 
+            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded"); 
             connection.setRequestProperty("charset", "utf-8");
             connection.connect();
             
             try(BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
                 String responseToken = reader.readLine();
-                return Response.ok().entity(responseToken).build();
+                response.setStatus(200);
+                response.getWriter().print(responseToken);
             }
             
         } catch (Exception ex) {
             ex.printStackTrace();
-            return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+            response.setStatus(500);
         }
     }
 }

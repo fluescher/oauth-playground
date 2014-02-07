@@ -1,11 +1,11 @@
 var playground = {
 	apiEndpoint: "http://localhost:8080/oauth-server/api/",
-	obtainTokenEndpoint: "http://localhost:8080/oauth-server/webapp/obtainToken",
+	obtainTokenEndpoint: "obtainToken",
 	token: "",
 	
 	obtainToken: function(goodCallback) {
 		var request = new XMLHttpRequest();
-		request.open("POST", obtainTokenEndpoint);
+		request.open("POST", playground.obtainTokenEndpoint);
 		request.onreadystatechange = function() {
 			if(request.readyState == 4) {
 				if(request.status == 200) {
