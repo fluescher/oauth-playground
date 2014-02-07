@@ -64,7 +64,6 @@ public class TokenEndpoint {
                 return doClientCredentialAuth(oauthRequest, oauthIssuer, authResponse);
                 
             } catch (OAuthProblemException oAuthProblem) {
-                System.out.println(oAuthProblem);
                 return createErrorResponse(oAuthProblem);
             } 
         }
@@ -111,7 +110,7 @@ public class TokenEndpoint {
         }
         
         final String token = oauthIssuer.accessToken();
-
+        
         authServer.registerToken(token, authRequest.getClientId(), authRequest.getScopes());
         
         OAuthResponse response = OAuthASResponse

@@ -23,7 +23,7 @@ public class SecuredResource {
     @GET 
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/allOptions")
-    @OAuthRequired(scopes={"allOption"})
+    @OAuthRequired(scopes={"allOptions"})
     public String getAllOptions() {
         return "Hi there all!\n";
     }

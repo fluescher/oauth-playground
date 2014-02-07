@@ -161,8 +161,6 @@ public class TokenEndpointTest extends RestTest {
                                         .setAccessToken(token)
                                         .buildHeaderMessage();
         OAuthResourceResponse response = client.resource(request, "GET", OAuthResourceResponse.class);
-        
-        System.out.println(response.getBody());
     }
 
     @Test

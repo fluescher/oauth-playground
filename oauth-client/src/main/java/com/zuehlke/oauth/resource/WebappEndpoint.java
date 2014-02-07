@@ -21,7 +21,12 @@ public class WebappEndpoint extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
         try {
-            URL url = new URL(AUTH_ENDPOINT + "?grant_type=client_credentials&client_id="+CLIENT_ID+"&client_secret="+CLIENT_SECRET); 
+            final String scopes = request.getParameter("scope").replace(" ", "%20");
+            
+            URL url = new URL(AUTH_ENDPOINT + "?grant_type=client_credentials"
+                                            + "&client_id="+CLIENT_ID+""
+                                            + "&client_secret="+CLIENT_SECRET
+                                            + "&scope="+scopes); 
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();           
             connection.setDoOutput(false); 
             connection.setInstanceFollowRedirects(false); 

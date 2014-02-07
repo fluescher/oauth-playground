@@ -8,10 +8,14 @@
     
     <script type="text/javascript" src="js/api.js"></script>
     <script type="text/javascript">
-        playground.obtainToken(showButton);
-
-        function showButton() {
+        function enableAllButtons() {
+        	document.getElementById("optionsButton").disabled = false;
+        	document.getElementById("allOptionsButton").disabled = false;
+        }
+        
+        function showButtons() {
             document.getElementById("optionsButton").disabled = false;
+            document.getElementById("allOptionsButton").disabled = false;
         }
         
         function showResponse(response) {
@@ -24,12 +28,36 @@
 <body>
     <div class="container">
         <h1 style="margin-bottom: 30px;">OAuth JS Demo App</h1>
+        <div class="row" style="margin-bottom: 30px">
+            <div class="col-md-12">
+                <button id="obtainBothTokens" class="btn btn-lg btn-success" type="button"
+                    onclick="enableAllButtons()">Enable the API buttons (even if no token or scope was requested)</button>
+            </div>
+        </div>
+        <h2>Obtain a OAuth token!</h2>
+        
+        <h3>With client grant of our webserver</h3>
+        <div class="row" style="margin-bottom: 30px">
+            <div class="col-md-4">
+                <button id="obtainOptionsToken" class="btn btn-lg btn-success" type="button"
+                        onclick="playground.obtainOptionsScopeToken(showButtons)">Get options scope token</button>
+            </div>
+            <div class="col-md-4">
+                <button id="obtainAllOptionsToken" class="btn btn-lg btn-success" type="button"
+                        onclick="playground.obtainAllOptionsScopeToken(showButtons)">Get all options scope token!</button>
+            </div> 
+            <div class="col-md-4">
+                <button id="obtainBothTokens" class="btn btn-lg btn-success" type="button"
+                        onclick="playground.obtainAllScopesTokens(showButtons)">Get both scopes token!</button>
+            </div> 
+        </div>
+        <h2>Query the API!</h2>
         <div class="row">
             <div class="col-md-2">
                 <button id="optionsButton" disabled class="btn btn-lg btn-success" type="button"
-                    onclick="playground.getOptions(showResponse)">Get Options!</button>
-                    <button id="optionsButton" disabled class="btn btn-lg btn-success" type="button"
-                    onclick="playground.getOptions(showResponse)">Get All Options!</button>
+                    onclick="playground.getOptions(showResponse)" style="width: 180px; margin-bottom: 3px;">Get Options!</button>
+                <button id="allOptionsButton" disabled class="btn btn-lg btn-success" type="button"
+                    onclick="playground.getAllOptions(showResponse)" style="width: 180px;">Get All Options!</button>
             </div>
             <div class="col-md-10">
                 <textarea id="response" class="span6" rows="3" placeholder="No Response Yet" required style="width: 800px; height: 100px;"></textarea>

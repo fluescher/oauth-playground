@@ -2,10 +2,11 @@ var playground = {
 	apiEndpoint: "http://localhost:8080/oauth-server/api/",
 	obtainTokenEndpoint: "obtainToken",
 	token: "",
+	scopes: [],
 	
-	obtainToken: function(goodCallback) {
+	obtainToken: function(scopes, goodCallback) {
 		var request = new XMLHttpRequest();
-		request.open("POST", playground.obtainTokenEndpoint);
+		request.open("POST", playground.obtainTokenEndpoint + "?scope="+scopes);
 		request.onreadystatechange = function() {
 			if(request.readyState == 4) {
 				if(request.status == 200) {
@@ -18,6 +19,18 @@ var playground = {
 			}
 		};
 		request.send(null);
+	},
+	
+	obtainOptionsScopeToken: function(goodCallback) { 
+		playground.obtainToken("options", goodCallback);
+	},
+	
+	obtainAllOptionsScopeToken: function(goodCallback) {
+		playground.obtainToken("allOptions", goodCallback);
+	},
+	
+	obtainAllScopesTokens: function(goodCallback) {
+		playground.obtainToken("options%20allOptions", goodCallback);
 	},
 	
 	getOptions: function(finishedCallback) {
