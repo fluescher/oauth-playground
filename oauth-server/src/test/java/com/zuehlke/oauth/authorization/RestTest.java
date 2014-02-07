@@ -16,7 +16,7 @@ import org.jboss.arquillian.test.api.ArquillianResource;
 import com.zuehlke.oauth.OAuthApplication;
 
 
-public class OAuthTest {
+public class RestTest {
     protected static final String RESOURCE_PREFIX = OAuthApplication.class.getAnnotation(ApplicationPath.class).value().substring(1);
     
     @ArquillianResource URL deploymentUrl;

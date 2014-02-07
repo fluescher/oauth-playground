@@ -27,12 +27,12 @@ import org.junit.runner.RunWith;
 
 import com.jayway.restassured.http.ContentType;
 import com.zuehlke.oauth.OAuthApplication;
-import com.zuehlke.oauth.authorization.OAuthTest;
+import com.zuehlke.oauth.authorization.RestTest;
 import com.zuehlke.oauth.authorization.resource.AutorizationResource;
 
 @RunWith(Arquillian.class)
 @RunAsClient
-public class AutorizationResourceTest extends OAuthTest {
+public class AutorizationResourceTest extends RestTest {
 
     @Deployment(testable=false)
     public static WebArchive createDeployment() {

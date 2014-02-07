@@ -22,13 +22,13 @@ import org.junit.runner.RunWith;
 
 import com.zuehlke.oauth.OAuthApplication;
 import com.zuehlke.oauth.authorization.AuthorizationServer;
-import com.zuehlke.oauth.authorization.OAuthTest;
+import com.zuehlke.oauth.authorization.RestTest;
 import com.zuehlke.oauth.authorization.impl.AuthorizationServerMock;
 import com.zuehlke.oauth.resource.auth.OAuthFilter;
 
 @RunWith(Arquillian.class)
 @RunAsClient
-public class SecuredResourceTest extends OAuthTest {
+public class SecuredResourceTest extends RestTest {
 
     @Deployment(testable=false)
     public static WebArchive createDeployment() {
