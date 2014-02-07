@@ -21,7 +21,7 @@ public class WebappEndpoint extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
         try {
-            final String host = "http://" + request.getServerName() + ':' + request.getServerPort();
+            final String host = request.getScheme()+"://" + request.getServerName() + ':' + request.getServerPort();
             System.out.println(host);
             final String scopes = request.getParameter("scope").replace(" ", "%20");
             
