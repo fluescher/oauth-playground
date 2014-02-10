@@ -44,7 +44,7 @@
         <hr />
         <div class="row" style="margin-bottom: 30px">
             <div class="col-md-12">
-                <button id="obtainBothTokens" class="btn btn-lg btn-success" type="button"
+                <button id="obtainBothTokens" class="btn btn-lg btn-success btn-block" type="button"
                     onclick="enableAllButtons()">Enable the API buttons (even if no token or scope was requested)</button>
             </div>
         </div>
@@ -53,15 +53,15 @@
         <h3>Using client grant of our webserver</h3>
         <div class="row" style="margin-bottom: 30px">
             <div class="col-md-4">
-                <button id="obtainOptionsToken" class="btn btn-lg btn-success" type="button"
+                <button id="obtainOptionsToken" class="btn btn-lg btn-success btn-block" type="button"
                         onclick="playground.obtainOptionsScopeToken(showButtons)">Get options scope token</button>
             </div>
             <div class="col-md-4">
-                <button id="obtainAllOptionsToken" class="btn btn-lg btn-success" type="button"
+                <button id="obtainAllOptionsToken" class="btn btn-lg btn-success btn-block" type="button"
                         onclick="playground.obtainAllOptionsScopeToken(showButtons)">Get all options scope token!</button>
             </div> 
             <div class="col-md-4">
-                <button id="obtainBothTokens" class="btn btn-lg btn-success" type="button"
+                <button id="obtainBothTokens" class="btn btn-lg btn-success btn-block" type="button"
                         onclick="playground.obtainAllScopesTokens(showButtons)">Get both scopes token!</button>
             </div> 
         </div>
@@ -85,10 +85,10 @@
         </div>
         <div class="row">
             <div class="col-md-2">
-                <button id="optionsButton" disabled class="btn btn-lg btn-success" type="button"
-                    onclick="playground.getOptions(showResponse)" style="width: 180px; margin-bottom: 3px;">Get Options!</button>
-                <button id="allOptionsButton" disabled class="btn btn-lg btn-success" type="button"
-                    onclick="playground.getAllOptions(showResponse)" style="width: 180px;">Get All Options!</button>
+                <button id="optionsButton" disabled class="btn btn-lg btn-success btn-block" type="button"
+                    onclick="playground.getOptions(showResponse)" style="margin-bottom: 3px;">Get Options!</button>
+                <button id="allOptionsButton" disabled class="btn btn-lg btn-success btn-block" type="button"
+                    onclick="playground.getAllOptions(showResponse)">Get All Options!</button>
             </div>
             <div class="col-md-10">
                 <textarea id="response" class="span6" rows="3" placeholder="No Response Yet" required style="width: 100%; height: 100px;"></textarea>
